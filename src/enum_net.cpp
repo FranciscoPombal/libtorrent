@@ -249,8 +249,7 @@ namespace {
 	{
 		rtmsg* rt_msg = reinterpret_cast<rtmsg*>(NLMSG_DATA(nl_hdr));
 
-		if (!valid_addr_family(rt_msg->rtm_family) || (rt_msg->rtm_table != RT_TABLE_MAIN
-			&& rt_msg->rtm_table != RT_TABLE_LOCAL))
+		if (!valid_addr_family(rt_msg->rtm_family))
 			return false;
 
 		// make sure the defaults have the right address family

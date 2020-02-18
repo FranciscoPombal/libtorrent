@@ -314,6 +314,20 @@ namespace aux {
 
 			ep.device = iface->name;
 		}
+
+		auto const not_loopback = [](listen_endpoint_t const& e)
+			{ return !is_loopback(e.addr); };
+
+		// this is a special case work-around for when we only have a single
+		// listen interface. Just assume we can reach the internet over it.
+		// it turns out that sometimes we may fail to enumerate routes, and get
+		// an empty routing table. Instead of just blocking everything, at least
+		// make it work in the single-homed case
+		if (std::count_if(eps.begin(), eps.end(), not_loopback) == 1)
+		{
+			auto const it = std::find_if(eps.begin(), eps.end(), not_loopback);
+			it->flags |= listen_socket_t::has_gateway;
+		}
 	}
 
 	bool listen_socket_t::can_route(address const& addr) const
@@ -1755,18 +1769,10 @@ namespace aux {
 			std::vector<ip_interface> const ifs = enum_net_interfaces(m_io_service, err);
 			if (err)
 			{
-#ifndef TORRENT_DISABLE_LOGGING
-				if (should_log())
-				{
-					session_log("failed to enumerate IPs on device: \"%s\": %s"
-						, device.c_str(), err.message().c_str());
-				}
-#endif
 				if (m_alerts.should_post<listen_failed_alert>())
 				{
 					m_alerts.emplace_alert<listen_failed_alert>(device
-						, operation_t::enum_if, err
-						, socket_type_t::tcp);
+						, operation_t::enum_if, err, socket_type_t::tcp);
 				}
 				return;
 			}
@@ -1852,7 +1858,17 @@ namespace aux {
 		{
 			expand_unspecified_address(ifs, eps);
 			auto const routes = enum_routes(m_io_service, ec);
-			if (!ec) expand_devices(ifs, routes, eps);
+			if (ec && m_alerts.should_post<listen_failed_alert>())
+			{
+				m_alerts.emplace_alert<listen_failed_alert>(""
+					, operation_t::enum_route, ec, socket_type_t::tcp);
+			}
+			expand_devices(ifs, routes, eps);
+		}
+		else if (m_alerts.should_post<listen_failed_alert>())
+		{
+			m_alerts.emplace_alert<listen_failed_alert>(""
+				, operation_t::enum_if, ec, socket_type_t::tcp);
 		}
 
 		auto remove_iter = partition_listen_sockets(eps, m_listen_sockets);
