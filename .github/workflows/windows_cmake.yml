@@ -2,10 +2,10 @@ name: Windows CMake build
 
 on:
   push:
-    branches: [ RC_1_2 ]
+    branches: [ RC_2_0 ]
   pull_request:
     types: [edited, opened, reopened, synchronize]
-    branches: [ RC_1_2 ]
+    branches: [ RC_2_0 ]
 
 env:
   # openssl: 1.1.1g#1
@@ -59,6 +59,8 @@ jobs:
     steps:
     - name: checkout repository
       uses: actions/checkout@v2.3.3
+      with:
+        submodules: recursive
 
     - name: setup environment - static build
       if: matrix.build_variant == 'static'
@@ -114,6 +116,8 @@ jobs:
           boost-crc:${{ env.VCPKG_TRIPLET }} `
           boost-date-time:${{ env.VCPKG_TRIPLET }} `
           boost-iterator:${{ env.VCPKG_TRIPLET }} `
+          boost-logic:${{ env.VCPKG_TRIPLET }} `
+          boost-multi-index:${{ env.VCPKG_TRIPLET }} `
           boost-multiprecision:${{ env.VCPKG_TRIPLET }} `
           boost-pool:${{ env.VCPKG_TRIPLET }} `
           boost-python:${{ env.VCPKG_TRIPLET }} `
@@ -147,7 +151,7 @@ jobs:
     - name: upload artifact as zip
       uses: actions/upload-artifact@v2.2.0
       with:
-        name: libtorrent_RC_1_2-CI-Windows_x64-${{ matrix.build_variant }}-${{ matrix.build_config }}-${{ matrix.deprecated_functions }}-${{ matrix.build_tests }}-${{ matrix.python_bindings }}
+        name: libtorrent_RC_2_0-CI-Windows_x64-${{ matrix.build_variant }}-${{ matrix.build_config }}-${{ matrix.deprecated_functions }}-${{ matrix.build_tests }}-${{ matrix.python_bindings }}
         path: |
           cmake-build-dir/compile_commands.json
           cmake-build-dir/target_graph.dot*
