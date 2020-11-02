@@ -68,7 +68,7 @@ jobs:
 
     - name: Set up Python - create symlink
       run: |
-        New-Item -Path $env:pythonLocation -ItemType SymbolicLink -Value $env:pythonLocation"\python3.exe"
+        New-Item -Path $env:pythonLocation\python.exe -ItemType SymbolicLink -Value $env:pythonLocation"\python3.exe"
         python3 --version
 
     - name: setup environment - static build
