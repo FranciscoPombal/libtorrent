@@ -20,6 +20,7 @@ env:
   LIBT_TESTS: "ON"
   LIBT_DEPR_FUN: "ON"
   LIBT_PY_BINDINGS: "ON"
+  PYTHONUTF8: "1"
 
 defaults:
   run:
@@ -37,6 +38,7 @@ jobs:
         deprecated_functions: [depr, nodepr]
         build_tests: [tests, notests]
         python_bindings: [py, nopy]
+        python-version: [3.6, 3.9]
         exclude:
           # python bindings require building with shared libs
           - build_variant: static
@@ -57,6 +59,12 @@ jobs:
     steps:
     - name: checkout repository
       uses: actions/checkout@v2.3.3
+
+    # TODO: symlink "python3"?
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
 
     - name: setup environment - static build
       if: matrix.build_variant == 'static'
