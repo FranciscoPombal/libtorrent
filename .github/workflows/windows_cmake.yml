@@ -66,6 +66,11 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
+    - name: Set up Python - create symlink
+      run: |
+        New-Item -Path $env:pythonLocation -ItemType SymbolicLink -Value $env:pythonLocation"\python3.exe"
+        python3 --version
+
     - name: setup environment - static build
       if: matrix.build_variant == 'static'
       shell: bash
