@@ -44,6 +44,7 @@ jobs:
           - build_variant: static
             python_bindings: py
           - build_variant: shared
+            build_config: rel
             python_bindings: nopy
           - build_variant: static
           # FIXME: non-static build with python bindings is failing, presumably due to a boost port bug in vcpkg
