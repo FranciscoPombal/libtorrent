@@ -44,13 +44,8 @@ jobs:
           - build_variant: static
             python_bindings: py
           - build_variant: shared
-            build_config: rel
             python_bindings: nopy
           - build_variant: static
-          - python_bindings: nopy
-            python-version: 3.6
-          - python_bindings: nopy
-            python-version: 3.9
           # FIXME: non-static build with python bindings is failing, presumably due to a boost port bug in vcpkg
           # See https://github.com/microsoft/vcpkg/issues/5097
           - build_variant: shared
@@ -70,6 +65,16 @@ jobs:
             python_bindings: nopy
           - build_config: rel
             build_variant: static
+            deprecated_functions: nodepr
+            build_tests: tests
+            python_bindings: nopy
+          - build_config: dbg
+            build_variant: shared
+            deprecated_functions: depr
+            build_tests: tests
+            python_bindings: nopy
+          - build_config: dbg
+            build_variant: shared
             deprecated_functions: nodepr
             build_tests: tests
             python_bindings: nopy
