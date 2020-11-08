@@ -9,9 +9,9 @@ on:
     branches: [ gha_windows_cmake_RC_1_2 ]
 
 env:
-  # openssl: 1.1.1g#1
-  # boost: 1.73.0
-  VCPKG_COMMIT: 27a2418e91179d8607862348d7b498558e98a0ab
+  # openssl: 1.1.1h#1
+  # boost: 1.74.0
+  VCPKG_COMMIT: 179bdd1697e03663869c2c3341343396c3ac6dfb
   VCPKG_DEST_WIN: C:\libt_tools\vcpkg
   VCPKG_TRIPLET: "x64-windows"
   BUILD_VARIANT: "shared"
