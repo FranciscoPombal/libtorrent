@@ -61,12 +61,22 @@ jobs:
         include:
           - build_config: dbg
             build_variant: shared
-            deprecated_functions: [depr, nodepr]
+            deprecated_functions: depr
+            build_tests: tests
+            python_bindings: nopy
+          - build_config: dbg
+            build_variant: shared
+            deprecated_functions: nodepr
             build_tests: tests
             python_bindings: nopy
           - build_config: dbg
             build_variant: static
-            deprecated_functions: [depr, nodepr]
+            deprecated_functions: depr
+            build_tests: notests
+            python_bindings: nopy
+          - build_config: dbg
+            build_variant: static
+            deprecated_functions: nodepr
             build_tests: notests
             python_bindings: nopy
       fail-fast: false
