@@ -59,12 +59,16 @@ jobs:
             build_tests: tests
         # add back some configs due to the FIXMEs above
         include:
-          - build_variant: shared
-            build_config: dbg
+          - build_config: dbg
+            build_variant: shared
+            deprecated_functions: [depr, nodepr]
+            build_tests: tests
             python_bindings: nopy
-          - build_variant: static
-            build_config: dbg
+          - build_config: dbg
+            build_variant: static
+            deprecated_functions: [depr, nodepr]
             build_tests: notests
+            python_bindings: nopy
       fail-fast: false
 
     runs-on: windows-2019
