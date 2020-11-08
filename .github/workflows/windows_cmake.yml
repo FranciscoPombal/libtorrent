@@ -46,7 +46,7 @@ jobs:
           - build_variant: shared
             python_bindings: nopy
           - build_variant: static
-            python-version: [3.6, 3.9]
+            python-version: 3.6
           # FIXME: non-static build with python bindings is failing, presumably due to a boost port bug in vcpkg
           # See https://github.com/microsoft/vcpkg/issues/5097
           - build_variant: shared
