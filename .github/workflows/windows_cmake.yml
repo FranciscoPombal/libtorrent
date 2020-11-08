@@ -43,6 +43,8 @@ jobs:
           # python bindings require building with shared libs
           - build_variant: static
             python_bindings: py
+          - build_variant: shared
+            python_bindings: nopy
           # FIXME: non-static build with python bindings is failing, presumably due to a boost port bug in vcpkg
           # See https://github.com/microsoft/vcpkg/issues/5097
           - build_variant: shared
@@ -52,6 +54,7 @@ jobs:
           - build_variant: static
             build_config: dbg
             build_tests: tests
+          - build_tests: notests
       fail-fast: false
 
     runs-on: windows-2019
