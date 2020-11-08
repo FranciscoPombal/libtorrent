@@ -87,17 +87,6 @@ jobs:
     - name: checkout repository
       uses: actions/checkout@v2.3.3
 
-    # TODO: symlink "python3"?
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Set up Python - create symlink
-      run: |
-        New-Item -ItemType SymbolicLink -Path $env:pythonLocation -Name python3.exe -Value python.exe
-        python3 --version
-
     - name: setup environment - static build
       if: matrix.build_variant == 'static'
       shell: bash
@@ -124,6 +113,19 @@ jobs:
       shell: bash
       run: |
         echo "LIBT_PY_BINDINGS=OFF" >> $GITHUB_ENV
+
+    # TODO: symlink "python3"?
+    - name: Set up Python
+      if: matrix.python_bindings == 'py'
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Set up Python - create symlink
+      if: matrix.python_bindings == 'py'
+      run: |
+        New-Item -ItemType SymbolicLink -Path $env:pythonLocation -Name python3.exe -Value python.exe
+        python3 --version
 
     # NOTE: MSVC tools must be in the path for the Ninja generator. Caveat: must use cmd
     - name: setup MSVC dev cmd
