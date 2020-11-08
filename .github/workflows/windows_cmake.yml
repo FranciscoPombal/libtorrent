@@ -50,11 +50,19 @@ jobs:
           - build_variant: shared
             build_config: dbg
             python_bindings: py
-          # static debug build with tests is too big
+          # FIXME: static debug build with tests is too big
+          - build_tests: notests
           - build_variant: static
             build_config: dbg
             build_tests: tests
-          - build_tests: notests
+        # add back some configs due to the FIXMEs above
+        include:
+          - build_variant: shared
+            build_config: dbg
+            python_bindings: nopy
+          - build_variant: static
+            build_config: dbg
+            build_tests: notests
       fail-fast: false
 
     runs-on: windows-2019
